@@ -1,1 +1,4 @@
-# ProgramacionAvanzada-Clase-1
+# ProgramacionAvanzada-Repo
+
+Nicolas Cataño Durango
+Ingeniería de Software 
