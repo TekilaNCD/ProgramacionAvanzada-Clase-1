@@ -34,13 +34,13 @@ práctico del notebook de Cálculo Aplicado.
 )
 
 def f2(x, y):
-    """Función objetivo. Por defecto: un 'tazón' con mínimo en (0, 0)."""
-    return x ** 2 + y ** 2
+    """Función objetivo. Paraboloide con mínimo en (3, -2)."""
+    return (x - 3) ** 2 + (y + 2) ** 2
 
 
 def gradiente_f2(x, y):
-    """Gradiente de f2: vector de derivadas parciales [df/dx, df/dy]."""
-    return np.array([2 * x, 2 * y])
+    """Gradiente de f2: [df/dx, df/dy] = [2(x-3), 2(y+2)]."""
+    return np.array([2 * (x - 3), 2 * (y + 2)])
 
 
 def descenso_gradiente(grad_func, punto_inicial, tasa_aprendizaje, iteraciones):
