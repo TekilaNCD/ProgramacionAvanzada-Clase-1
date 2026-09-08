@@ -1,5 +1,5 @@
-streamlit
+streamlit>=1.31
 pandas
 numpy
 requests
-urllib3
+plotly
