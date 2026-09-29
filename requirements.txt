@@ -1,7 +1,11 @@
-streamlit>=1.36
+streamlit
 pandas
 numpy
-scikit-learn
 matplotlib
-requests
-InfluxDBClient
+seaborn
+scikit-learn
+scipy
+statsmodels
+plotly
+Pillow
+influxdb-client
