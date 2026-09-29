@@ -3,9 +3,10 @@ import base64
 import os
 
 st.set_page_config(
-    page_title="Portafolio | Ciencia de Datos e IA",
+    page_title="Portafolio Programación Avanzada",
     page_icon="🚀",
     layout="wide",
+    initial_sidebar_state="collapsed",
 )
 
 # ---------------------------------------------------------------
@@ -21,7 +22,7 @@ html, body, [class*="css"] { font-family: 'Poppins', sans-serif; }
     background: radial-gradient(circle at 10% 0%, #1e1b4b 0%, #0f172a 45%, #020617 100%);
 }
 .stApp, .stApp p, .stApp span, .stApp label, .stApp li { color: #e2e8f0; }
-[data-testid="stSidebar"] { background: #0b1120; border-right: 1px solid #1e293b; }
+[data-testid="stSidebar"], [data-testid="collapsedControl"] { display: none; }
 header[data-testid="stHeader"] { background: transparent; }
 .block-container { padding-top: 2rem; max-width: 1250px; }
 
@@ -29,26 +30,45 @@ header[data-testid="stHeader"] { background: transparent; }
 .hero {
     background: linear-gradient(120deg, #6366f1 0%, #8b5cf6 40%, #ec4899 100%);
     border-radius: 28px;
-    padding: 48px 40px;
+    padding: 52px 40px;
     margin-bottom: 28px;
     box-shadow: 0 20px 50px rgba(99, 102, 241, .35);
     position: relative;
     overflow: hidden;
+    text-align: center;
 }
 .hero::after {
     content: "🤖 📊 🧠";
     position: absolute; right: 30px; top: 20px;
     font-size: 60px; opacity: .22; letter-spacing: 10px;
 }
-.hero h1 { color: #fff !important; font-size: 2.6rem; font-weight: 800; margin: 0 0 8px 0; }
-.hero p  { color: #f1f5f9 !important; font-size: 1.05rem; max-width: 650px; margin: 0; }
-.hero a  {
-    display: inline-block; margin-top: 18px; padding: 10px 22px;
+.hero h1 { color: #fff !important; font-size: 2.8rem; font-weight: 800; margin: 0 0 10px 0; }
+.hero .autor {
+    display: inline-block; padding: 8px 24px;
     background: rgba(255,255,255,.18); border: 1px solid rgba(255,255,255,.4);
-    border-radius: 999px; color: #fff !important; text-decoration: none;
-    font-weight: 600; backdrop-filter: blur(6px); transition: all .25s;
+    border-radius: 999px; color: #fff !important; font-weight: 600; font-size: 1.05rem;
+    backdrop-filter: blur(6px);
 }
-.hero a:hover { background: #fff; color: #6366f1 !important; }
+
+/* KPIs */
+.kpis {
+    display: flex; justify-content: center; gap: 22px; flex-wrap: wrap;
+    margin-bottom: 40px;
+}
+.kpi {
+    min-width: 220px; text-align: center; padding: 22px 30px;
+    background: rgba(255,255,255,.06);
+    border: 1px solid rgba(255,255,255,.12);
+    border-radius: 20px; backdrop-filter: blur(8px);
+    transition: transform .3s, border-color .3s;
+}
+.kpi:hover { transform: translateY(-5px); border-color: rgba(255,255,255,.4); }
+.kpi .valor {
+    font-size: 2.4rem; font-weight: 800;
+    background: linear-gradient(90deg, #818cf8, #f472b6);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+.kpi .etiqueta { font-size: .9rem; color: #cbd5e1; margin-top: 4px; }
 
 /* TARJETAS */
 .card {
@@ -100,63 +120,70 @@ header[data-testid="stHeader"] { background: transparent; }
 # "imagen": nombre de archivo opcional (si no, se usa el emoji).
 # ---------------------------------------------------------------
 apps = [
-    {"n": 2,  "emoji": "🍎", "cat": "Fundamentos", "titulo": "App de frutas",
+    {"n": 2,  "emoji": "🍎", "titulo": "App de frutas",
      "desc": "Primera aplicación interactiva construida con Streamlit.",
      "tags": ["Streamlit", "Python"], "colores": ("#f97316", "#ef4444"),
      "url": "https://TU-APP-SESION-2.streamlit.app/", "imagen": None},
 
-    {"n": 3,  "emoji": "📉", "cat": "Machine Learning", "titulo": "Gradiente descendente",
+    {"n": 3,  "emoji": "📉", "titulo": "Gradiente descendente",
      "desc": "Visualiza cómo el algoritmo de gradiente encuentra el mínimo de una función.",
      "tags": ["Optimización", "Visualización"], "colores": ("#06b6d4", "#3b82f6"),
      "url": "https://TU-APP-SESION-3.streamlit.app/", "imagen": None},
 
-    {"n": 4,  "emoji": "🚨", "cat": "Análisis de datos", "titulo": "Detector de anomalías",
+    {"n": 4,  "emoji": "🚨", "titulo": "Detector de anomalías",
      "desc": "Identifica valores atípicos en conjuntos de datos de forma interactiva.",
      "tags": ["Anomalías", "Estadística"], "colores": ("#ef4444", "#be123c"),
      "url": "https://TU-APP-SESION-4.streamlit.app/", "imagen": None},
 
-    {"n": 5,  "emoji": "🧹", "cat": "Análisis de datos", "titulo": "Preparación de datos",
+    {"n": 5,  "emoji": "🧹", "titulo": "Preparación de datos",
      "desc": "Limpieza, transformación y preparación de datos antes de modelar.",
      "tags": ["Pandas", "Limpieza"], "colores": ("#10b981", "#059669"),
      "url": "https://TU-APP-SESION-5.streamlit.app/", "imagen": None},
 
-    {"n": 6,  "emoji": "🌊", "cat": "Análisis de datos", "titulo": "Preparación de datos · Cornare",
+    {"n": 6,  "emoji": "🌊", "titulo": "Preparación de datos · Cornare",
      "desc": "Caso práctico de preparación de datos con niveles de Cornare.",
      "tags": ["Caso real", "Pandas"], "colores": ("#0ea5e9", "#0369a1"),
      "url": "https://TU-APP-SESION-6.streamlit.app/", "imagen": None},
 
-    {"n": 7,  "emoji": "📈", "cat": "Machine Learning", "titulo": "Regresión lineal",
+    {"n": 7,  "emoji": "📈", "titulo": "Regresión lineal",
      "desc": "Conceptos clave de la regresión lineal explicados de forma interactiva.",
      "tags": ["Regresión", "Scikit-learn"], "colores": ("#8b5cf6", "#6d28d9"),
      "url": "https://TU-APP-SESION-7.streamlit.app/", "imagen": None},
 
-    {"n": 8,  "emoji": "⏳", "cat": "Series de tiempo", "titulo": "Series de tiempo",
+    {"n": 8,  "emoji": "⏳", "titulo": "Series de tiempo",
      "desc": "Análisis, descomposición y visualización de series temporales.",
      "tags": ["Tendencia", "Estacionalidad"], "colores": ("#f59e0b", "#d97706"),
      "url": "https://TU-APP-SESION-8.streamlit.app/", "imagen": None},
 
-    {"n": 9,  "emoji": "🌬️", "cat": "Series de tiempo", "titulo": "Calidad del aire · Pronóstico",
+    {"n": 9,  "emoji": "🌬️", "titulo": "Calidad del aire · Pronóstico",
      "desc": "Predicción y modelado de la calidad del aire con datos de Cornare.",
      "tags": ["Pronóstico", "Ambiental"], "colores": ("#14b8a6", "#0f766e"),
      "url": "https://TU-APP-SESION-9.streamlit.app/", "imagen": None},
 
-    {"n": 10, "emoji": "📡", "cat": "IoT", "titulo": "Sistema IoT",
+    {"n": 10, "emoji": "📡", "titulo": "Sistema IoT",
      "desc": "Captura y procesamiento de datos propios usando tecnologías IoT.",
      "tags": ["IoT", "Sensores", "Tiempo real"], "colores": ("#ec4899", "#be185d"),
      "url": "https://TU-APP-SESION-10.streamlit.app/", "imagen": None},
 
-    {"n": 11, "emoji": "🎯", "cat": "Machine Learning", "titulo": "Regresión logística",
+    {"n": 11, "emoji": "🎯", "titulo": "Regresión logística",
      "desc": "Del modelo lineal al logístico: clasificación binaria paso a paso.",
      "tags": ["Clasificación", "Probabilidad"], "colores": ("#6366f1", "#4338ca"),
      "url": "https://TU-APP-SESION-11.streamlit.app/", "imagen": None},
 
-    {"n": 12, "emoji": "🌱", "cat": "Machine Learning", "titulo": "KNN · Fertilidad de suelos",
+    {"n": 12, "emoji": "🌱", "titulo": "KNN · Fertilidad de suelos",
      "desc": "Clasificación de la fertilidad de suelos con K-Nearest Neighbors.",
      "tags": ["KNN", "Agro", "Clasificación"], "colores": ("#84cc16", "#4d7c0f"),
      "url": "https://TU-APP-SESION-12.streamlit.app/", "imagen": None},
 ]
 
-url_ia = "https://sites.google.com/view/aplicacionesdeia/inicio"
+# ---------------------------------------------------------------
+# KPIs: edita los valores y etiquetas a tu gusto
+# ---------------------------------------------------------------
+kpis = [
+    (str(len(apps)), "Apps desplegadas"),
+    ("2 – 12", "Sesiones cubiertas"),
+    ("Streamlit", "Plataforma de despliegue"),
+]
 
 
 def img_base64(ruta):
@@ -186,56 +213,34 @@ def tarjeta(app):
 
 
 # ---------------------------------------------------------------
-# SIDEBAR
-# ---------------------------------------------------------------
-with st.sidebar:
-    st.markdown("## 🚀 Portafolio")
-    st.write(
-        "Aplicaciones de ciencia de datos e inteligencia artificial "
-        "desarrolladas en Streamlit."
-    )
-    st.divider()
-
-    busqueda = st.text_input("🔎 Buscar app", placeholder="Ej: regresión, IoT...")
-    categorias = sorted({a["cat"] for a in apps})
-    seleccion = st.multiselect("🏷️ Categoría", categorias, default=categorias)
-
-    st.divider()
-    st.metric("Apps desplegadas", len(apps))
-    st.metric("Categorías", len(categorias))
-
-# ---------------------------------------------------------------
 # HERO
 # ---------------------------------------------------------------
-st.markdown(f"""
+st.markdown("""
 <div class="hero">
-    <h1>Aplicaciones de Ciencia de Datos e IA</h1>
-    <p>Un recorrido por mis proyectos: desde la preparación de datos y los modelos
-    de machine learning hasta series de tiempo e IoT. Todas las apps están
-    desplegadas y listas para probar.</p>
-    <a href="{url_ia}" target="_blank">📚 Ver páginas y ejercicios prácticos</a>
+    <h1>Portafolio Programación Avanzada</h1>
+    <span class="autor">👨‍💻 Nicolas Cataño Durango</span>
 </div>
 """, unsafe_allow_html=True)
 
 # ---------------------------------------------------------------
+# KPIs (centrados)
+# ---------------------------------------------------------------
+kpi_html = "".join(
+    f'<div class="kpi"><div class="valor">{v}</div><div class="etiqueta">{e}</div></div>'
+    for v, e in kpis
+)
+st.markdown(f'<div class="kpis">{kpi_html}</div>', unsafe_allow_html=True)
+
+# ---------------------------------------------------------------
 # GALERÍA
 # ---------------------------------------------------------------
-filtradas = [
-    a for a in apps
-    if a["cat"] in seleccion
-    and busqueda.lower() in (a["titulo"] + a["desc"] + " ".join(a["tags"])).lower()
-]
-
-if not filtradas:
-    st.info("No hay apps que coincidan con tu búsqueda 🤷")
-
-for i in range(0, len(filtradas), 3):
+for i in range(0, len(apps), 3):
     cols = st.columns(3, gap="large")
-    for col, app in zip(cols, filtradas[i:i + 3]):
+    for col, app in zip(cols, apps[i:i + 3]):
         with col:
             st.markdown(tarjeta(app), unsafe_allow_html=True)
 
 st.markdown(
-    '<div class="footer">Hecho con ❤️ y Streamlit · Nicolas</div>',
+    '<div class="footer">Hecho con ❤️ y Streamlit · Nicolas Cataño Durango</div>',
     unsafe_allow_html=True,
 )
