@@ -123,57 +123,57 @@ apps = [
     {"n": 2,  "emoji": "🍎", "titulo": "App de frutas",
      "desc": "Primera aplicación interactiva construida con Streamlit.",
      "tags": ["Streamlit", "Python"], "colores": ("#f97316", "#ef4444"),
-     "url": "https://TU-APP-SESION-2.streamlit.app/", "imagen": None},
+     "url": "https://programacionavanzada-clase-1-dnoxq5z6qr4t5anxx5p8vq.streamlit.app", "imagen": None},
 
     {"n": 3,  "emoji": "📉", "titulo": "Gradiente descendente",
      "desc": "Visualiza cómo el algoritmo de gradiente encuentra el mínimo de una función.",
      "tags": ["Optimización", "Visualización"], "colores": ("#06b6d4", "#3b82f6"),
-     "url": "https://TU-APP-SESION-3.streamlit.app/", "imagen": None},
+     "url": "https://programacionavanzada-clase-1-u8awljhwdn5usnekberhgz.streamlit.app", "imagen": None},
 
     {"n": 4,  "emoji": "🚨", "titulo": "Detector de anomalías",
      "desc": "Identifica valores atípicos en conjuntos de datos de forma interactiva.",
      "tags": ["Anomalías", "Estadística"], "colores": ("#ef4444", "#be123c"),
-     "url": "https://TU-APP-SESION-4.streamlit.app/", "imagen": None},
+     "url": "https://programacionavanzada-clase-1-ktlpttt5c4gzacfax5ndw7.streamlit.app", "imagen": None},
 
     {"n": 5,  "emoji": "🧹", "titulo": "Preparación de datos",
      "desc": "Limpieza, transformación y preparación de datos antes de modelar.",
      "tags": ["Pandas", "Limpieza"], "colores": ("#10b981", "#059669"),
-     "url": "https://TU-APP-SESION-5.streamlit.app/", "imagen": None},
+     "url": "https://programacionavanzada-clase-1-fnofzlxytbbce4mtovqgz2.streamlit.app", "imagen": None},
 
     {"n": 6,  "emoji": "🌊", "titulo": "Preparación de datos · Cornare",
      "desc": "Caso práctico de preparación de datos con niveles de Cornare.",
      "tags": ["Caso real", "Pandas"], "colores": ("#0ea5e9", "#0369a1"),
-     "url": "https://TU-APP-SESION-6.streamlit.app/", "imagen": None},
+     "url": "https://programacionavanzada-clase-1-uykiwem2gsamauyqmyaj3i.streamlit.app", "imagen": None},
 
     {"n": 7,  "emoji": "📈", "titulo": "Regresión lineal",
      "desc": "Conceptos clave de la regresión lineal explicados de forma interactiva.",
      "tags": ["Regresión", "Scikit-learn"], "colores": ("#8b5cf6", "#6d28d9"),
-     "url": "https://TU-APP-SESION-7.streamlit.app/", "imagen": None},
+     "url": "https://programacionavanzada-clase-1-elwih9xqdefurrlmj8obsq.streamlit.app", "imagen": None},
 
     {"n": 8,  "emoji": "⏳", "titulo": "Series de tiempo",
      "desc": "Análisis, descomposición y visualización de series temporales.",
      "tags": ["Tendencia", "Estacionalidad"], "colores": ("#f59e0b", "#d97706"),
-     "url": "https://TU-APP-SESION-8.streamlit.app/", "imagen": None},
+     "url": "https://programacionavanzada-clase-1-oemqubtz8jkjnthfkq7pfx.streamlit.app", "imagen": None},
 
     {"n": 9,  "emoji": "🌬️", "titulo": "Calidad del aire · Pronóstico",
      "desc": "Predicción y modelado de la calidad del aire con datos de Cornare.",
      "tags": ["Pronóstico", "Ambiental"], "colores": ("#14b8a6", "#0f766e"),
-     "url": "https://TU-APP-SESION-9.streamlit.app/", "imagen": None},
+     "url": "https://programacionavanzada-clase-1-qhadhcbsxrakl7empsktkr.streamlit.app", "imagen": None},
 
     {"n": 10, "emoji": "📡", "titulo": "Sistema IoT",
      "desc": "Captura y procesamiento de datos propios usando tecnologías IoT.",
      "tags": ["IoT", "Sensores", "Tiempo real"], "colores": ("#ec4899", "#be185d"),
-     "url": "https://TU-APP-SESION-10.streamlit.app/", "imagen": None},
+     "url": "https://programacionavanzada-clase-1-wgrmypvcjbsbamfxhypls8.streamlit.app", "imagen": None},
 
     {"n": 11, "emoji": "🎯", "titulo": "Regresión logística",
      "desc": "Del modelo lineal al logístico: clasificación binaria paso a paso.",
      "tags": ["Clasificación", "Probabilidad"], "colores": ("#6366f1", "#4338ca"),
-     "url": "https://TU-APP-SESION-11.streamlit.app/", "imagen": None},
+     "url": "https://programacionavanzada-clase-1-ewnjnlber36sslfwcxucs3.streamlit.app", "imagen": None},
 
     {"n": 12, "emoji": "🌱", "titulo": "KNN · Fertilidad de suelos",
      "desc": "Clasificación de la fertilidad de suelos con K-Nearest Neighbors.",
      "tags": ["KNN", "Agro", "Clasificación"], "colores": ("#84cc16", "#4d7c0f"),
-     "url": "https://TU-APP-SESION-12.streamlit.app/", "imagen": None},
+     "url": "https://programacionavanzada-clase-1-fcrsjsicmqqypn9uhrjb4j.streamlit.app", "imagen": None},
 ]
 
 # ---------------------------------------------------------------
