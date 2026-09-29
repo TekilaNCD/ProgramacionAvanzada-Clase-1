@@ -1,105 +1,241 @@
 import streamlit as st
-from PIL import Image
+import base64
 import os
 
-st.set_page_config(page_title="Portafolio de Aplicaciones", layout="wide")
-st.title("Portafolio de Aplicaciones de Ciencia de Datos e IA")
-
-with st.sidebar:
-    st.subheader("Sobre este portafolio")
-    st.write(
-        "Colección de aplicaciones desarrolladas en Streamlit durante el curso de "
-        "Programación Avanzada: regresión, clasificación, series de tiempo, IoT, "
-        "detección de anomalías y preparación de datos."
-    )
+st.set_page_config(
+    page_title="Portafolio | Ciencia de Datos e IA",
+    page_icon="🚀",
+    layout="wide",
+)
 
 # ---------------------------------------------------------------
-# Lista de apps: reemplaza cada "url" por tu enlace desplegado.
-# "imagen" es opcional: pon el nombre del archivo si tienes una.
+# ESTILOS
+# ---------------------------------------------------------------
+st.markdown("""
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
+
+html, body, [class*="css"] { font-family: 'Poppins', sans-serif; }
+
+.stApp {
+    background: radial-gradient(circle at 10% 0%, #1e1b4b 0%, #0f172a 45%, #020617 100%);
+}
+.stApp, .stApp p, .stApp span, .stApp label, .stApp li { color: #e2e8f0; }
+[data-testid="stSidebar"] { background: #0b1120; border-right: 1px solid #1e293b; }
+header[data-testid="stHeader"] { background: transparent; }
+.block-container { padding-top: 2rem; max-width: 1250px; }
+
+/* HERO */
+.hero {
+    background: linear-gradient(120deg, #6366f1 0%, #8b5cf6 40%, #ec4899 100%);
+    border-radius: 28px;
+    padding: 48px 40px;
+    margin-bottom: 28px;
+    box-shadow: 0 20px 50px rgba(99, 102, 241, .35);
+    position: relative;
+    overflow: hidden;
+}
+.hero::after {
+    content: "🤖 📊 🧠";
+    position: absolute; right: 30px; top: 20px;
+    font-size: 60px; opacity: .22; letter-spacing: 10px;
+}
+.hero h1 { color: #fff !important; font-size: 2.6rem; font-weight: 800; margin: 0 0 8px 0; }
+.hero p  { color: #f1f5f9 !important; font-size: 1.05rem; max-width: 650px; margin: 0; }
+.hero a  {
+    display: inline-block; margin-top: 18px; padding: 10px 22px;
+    background: rgba(255,255,255,.18); border: 1px solid rgba(255,255,255,.4);
+    border-radius: 999px; color: #fff !important; text-decoration: none;
+    font-weight: 600; backdrop-filter: blur(6px); transition: all .25s;
+}
+.hero a:hover { background: #fff; color: #6366f1 !important; }
+
+/* TARJETAS */
+.card {
+    background: rgba(255,255,255,.05);
+    border: 1px solid rgba(255,255,255,.10);
+    border-radius: 22px;
+    overflow: hidden;
+    margin-bottom: 24px;
+    transition: transform .3s, box-shadow .3s, border-color .3s;
+    backdrop-filter: blur(8px);
+}
+.card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 18px 40px rgba(0,0,0,.5);
+    border-color: rgba(255,255,255,.35);
+}
+.card-top {
+    height: 140px; display: flex; align-items: center; justify-content: center;
+    font-size: 64px; position: relative;
+}
+.card-top img { width: 100%; height: 100%; object-fit: cover; }
+.badge-num {
+    position: absolute; top: 12px; left: 14px;
+    background: rgba(0,0,0,.35); color: #fff; font-size: 12px; font-weight: 600;
+    padding: 4px 12px; border-radius: 999px;
+}
+.card-body { padding: 18px 20px 22px 20px; }
+.card-body h3 { color: #fff !important; font-size: 1.1rem; font-weight: 600; margin: 0 0 8px 0; }
+.card-body p  { font-size: .88rem; color: #cbd5e1 !important; min-height: 60px; margin: 0 0 12px 0; }
+.tag {
+    display: inline-block; background: rgba(99,102,241,.22); color: #c7d2fe;
+    font-size: 11px; padding: 3px 10px; border-radius: 999px; margin: 0 4px 6px 0;
+    border: 1px solid rgba(99,102,241,.4);
+}
+.btn {
+    display: block; text-align: center; margin-top: 10px; padding: 10px;
+    background: linear-gradient(90deg, #6366f1, #ec4899);
+    color: #fff !important; font-weight: 600; text-decoration: none;
+    border-radius: 12px; transition: all .25s;
+}
+.btn:hover { filter: brightness(1.15); letter-spacing: .5px; }
+
+.footer { text-align: center; color: #64748b; font-size: 13px; margin-top: 30px; padding-bottom: 20px; }
+</style>
+""", unsafe_allow_html=True)
+
+# ---------------------------------------------------------------
+# DATOS: reemplaza cada "url" por tu enlace desplegado.
+# "imagen": nombre de archivo opcional (si no, se usa el emoji).
 # ---------------------------------------------------------------
 apps = [
-    {
-        "titulo": "Sesión 2. App de frutas",
-        "descripcion": "Primera aplicación interactiva con Streamlit.",
-        "url": "https://TU-APP-SESION-2.streamlit.app/",
-        "imagen": None,
-    },
-    {
-        "titulo": "Sesión 3. Gradiente descendente",
-        "descripcion": "Visualización interactiva del algoritmo de gradiente.",
-        "url": "https://TU-APP-SESION-3.streamlit.app/",
-        "imagen": None,
-    },
-    {
-        "titulo": "Sesión 4. Detector de anomalías",
-        "descripcion": "Detección de valores atípicos en datos.",
-        "url": "https://TU-APP-SESION-4.streamlit.app/",
-        "imagen": None,
-    },
-    {
-        "titulo": "Sesión 5. Preparación de datos",
-        "descripcion": "Limpieza y transformación de datos.",
-        "url": "https://TU-APP-SESION-5.streamlit.app/",
-        "imagen": None,
-    },
-    {
-        "titulo": "Sesión 6. Preparación de datos (Cornare)",
-        "descripcion": "Aplicación práctica de preparación de datos con niveles de Cornare.",
-        "url": "https://TU-APP-SESION-6.streamlit.app/",
-        "imagen": None,
-    },
-    {
-        "titulo": "Sesión 7. Regresión lineal",
-        "descripcion": "Conceptos de regresión lineal de forma interactiva.",
-        "url": "https://TU-APP-SESION-7.streamlit.app/",
-        "imagen": None,
-    },
-    {
-        "titulo": "Sesión 8. Series de tiempo",
-        "descripcion": "Análisis y visualización de series temporales.",
-        "url": "https://TU-APP-SESION-8.streamlit.app/",
-        "imagen": None,
-    },
-    {
-        "titulo": "Sesión 9. Calidad del aire",
-        "descripcion": "Predicción y modelado de la calidad del aire (Cornare).",
-        "url": "https://TU-APP-SESION-9.streamlit.app/",
-        "imagen": None,
-    },
-    {
-        "titulo": "Sesión 10. Sistema IoT",
-        "descripcion": "Captura y procesamiento de datos propios con IoT.",
-        "url": "https://TU-APP-SESION-10.streamlit.app/",
-        "imagen": None,
-    },
-    {
-        "titulo": "Sesión 11. Regresión logística",
-        "descripcion": "De la regresión lineal a la logística.",
-        "url": "https://TU-APP-SESION-11.streamlit.app/",
-        "imagen": None,
-    },
-    {
-        "titulo": "Sesión 12. KNN: fertilidad de suelos",
-        "descripcion": "Clasificación de la fertilidad de suelos con K-Nearest Neighbors.",
-        "url": "https://TU-APP-SESION-12.streamlit.app/",
-        "imagen": None,
-    },
+    {"n": 2,  "emoji": "🍎", "cat": "Fundamentos", "titulo": "App de frutas",
+     "desc": "Primera aplicación interactiva construida con Streamlit.",
+     "tags": ["Streamlit", "Python"], "colores": ("#f97316", "#ef4444"),
+     "url": "https://TU-APP-SESION-2.streamlit.app/", "imagen": None},
+
+    {"n": 3,  "emoji": "📉", "cat": "Machine Learning", "titulo": "Gradiente descendente",
+     "desc": "Visualiza cómo el algoritmo de gradiente encuentra el mínimo de una función.",
+     "tags": ["Optimización", "Visualización"], "colores": ("#06b6d4", "#3b82f6"),
+     "url": "https://TU-APP-SESION-3.streamlit.app/", "imagen": None},
+
+    {"n": 4,  "emoji": "🚨", "cat": "Análisis de datos", "titulo": "Detector de anomalías",
+     "desc": "Identifica valores atípicos en conjuntos de datos de forma interactiva.",
+     "tags": ["Anomalías", "Estadística"], "colores": ("#ef4444", "#be123c"),
+     "url": "https://TU-APP-SESION-4.streamlit.app/", "imagen": None},
+
+    {"n": 5,  "emoji": "🧹", "cat": "Análisis de datos", "titulo": "Preparación de datos",
+     "desc": "Limpieza, transformación y preparación de datos antes de modelar.",
+     "tags": ["Pandas", "Limpieza"], "colores": ("#10b981", "#059669"),
+     "url": "https://TU-APP-SESION-5.streamlit.app/", "imagen": None},
+
+    {"n": 6,  "emoji": "🌊", "cat": "Análisis de datos", "titulo": "Preparación de datos · Cornare",
+     "desc": "Caso práctico de preparación de datos con niveles de Cornare.",
+     "tags": ["Caso real", "Pandas"], "colores": ("#0ea5e9", "#0369a1"),
+     "url": "https://TU-APP-SESION-6.streamlit.app/", "imagen": None},
+
+    {"n": 7,  "emoji": "📈", "cat": "Machine Learning", "titulo": "Regresión lineal",
+     "desc": "Conceptos clave de la regresión lineal explicados de forma interactiva.",
+     "tags": ["Regresión", "Scikit-learn"], "colores": ("#8b5cf6", "#6d28d9"),
+     "url": "https://TU-APP-SESION-7.streamlit.app/", "imagen": None},
+
+    {"n": 8,  "emoji": "⏳", "cat": "Series de tiempo", "titulo": "Series de tiempo",
+     "desc": "Análisis, descomposición y visualización de series temporales.",
+     "tags": ["Tendencia", "Estacionalidad"], "colores": ("#f59e0b", "#d97706"),
+     "url": "https://TU-APP-SESION-8.streamlit.app/", "imagen": None},
+
+    {"n": 9,  "emoji": "🌬️", "cat": "Series de tiempo", "titulo": "Calidad del aire · Pronóstico",
+     "desc": "Predicción y modelado de la calidad del aire con datos de Cornare.",
+     "tags": ["Pronóstico", "Ambiental"], "colores": ("#14b8a6", "#0f766e"),
+     "url": "https://TU-APP-SESION-9.streamlit.app/", "imagen": None},
+
+    {"n": 10, "emoji": "📡", "cat": "IoT", "titulo": "Sistema IoT",
+     "desc": "Captura y procesamiento de datos propios usando tecnologías IoT.",
+     "tags": ["IoT", "Sensores", "Tiempo real"], "colores": ("#ec4899", "#be185d"),
+     "url": "https://TU-APP-SESION-10.streamlit.app/", "imagen": None},
+
+    {"n": 11, "emoji": "🎯", "cat": "Machine Learning", "titulo": "Regresión logística",
+     "desc": "Del modelo lineal al logístico: clasificación binaria paso a paso.",
+     "tags": ["Clasificación", "Probabilidad"], "colores": ("#6366f1", "#4338ca"),
+     "url": "https://TU-APP-SESION-11.streamlit.app/", "imagen": None},
+
+    {"n": 12, "emoji": "🌱", "cat": "Machine Learning", "titulo": "KNN · Fertilidad de suelos",
+     "desc": "Clasificación de la fertilidad de suelos con K-Nearest Neighbors.",
+     "tags": ["KNN", "Agro", "Clasificación"], "colores": ("#84cc16", "#4d7c0f"),
+     "url": "https://TU-APP-SESION-12.streamlit.app/", "imagen": None},
 ]
 
-# Enlace general (opcional): si no lo necesitas, borra estas 3 líneas
 url_ia = "https://sites.google.com/view/aplicacionesdeia/inicio"
-st.subheader("Más páginas y ejercicios prácticos")
-st.write(f"[Ir al sitio de ejercicios]({url_ia})")
 
-st.divider()
 
-# Cuadrícula de 3 columnas: reparte las apps en orden
-cols = st.columns(3)
-for i, app in enumerate(apps):
-    with cols[i % 3]:
-        st.subheader(app["titulo"])
-        if app["imagen"] and os.path.exists(app["imagen"]):
-            st.image(Image.open(app["imagen"]), width=200)
-        st.write(app["descripcion"])
-        st.link_button("Abrir app", app["url"])
-        st.write("")  # espacio entre tarjetas
+def img_base64(ruta):
+    """Convierte una imagen local a base64 para incrustarla en el HTML."""
+    if ruta and os.path.exists(ruta):
+        ext = ruta.split(".")[-1].lower()
+        mime = "jpeg" if ext in ("jpg", "jpeg") else ext
+        with open(ruta, "rb") as f:
+            return f"data:image/{mime};base64,{base64.b64encode(f.read()).decode()}"
+    return None
+
+
+def tarjeta(app):
+    c1, c2 = app["colores"]
+    src = img_base64(app["imagen"])
+    visual = f'<img src="{src}">' if src else app["emoji"]
+    tags = "".join(f'<span class="tag">{t}</span>' for t in app["tags"])
+    return (
+        f'<div class="card">'
+        f'<div class="card-top" style="background: linear-gradient(135deg, {c1}, {c2});">'
+        f'<span class="badge-num">Sesión {app["n"]}</span>{visual}</div>'
+        f'<div class="card-body"><h3>{app["titulo"]}</h3>'
+        f'<p>{app["desc"]}</p>{tags}'
+        f'<a class="btn" href="{app["url"]}" target="_blank">Abrir app →</a>'
+        f'</div></div>'
+    )
+
+
+# ---------------------------------------------------------------
+# SIDEBAR
+# ---------------------------------------------------------------
+with st.sidebar:
+    st.markdown("## 🚀 Portafolio")
+    st.write(
+        "Aplicaciones de ciencia de datos e inteligencia artificial "
+        "desarrolladas en Streamlit."
+    )
+    st.divider()
+
+    busqueda = st.text_input("🔎 Buscar app", placeholder="Ej: regresión, IoT...")
+    categorias = sorted({a["cat"] for a in apps})
+    seleccion = st.multiselect("🏷️ Categoría", categorias, default=categorias)
+
+    st.divider()
+    st.metric("Apps desplegadas", len(apps))
+    st.metric("Categorías", len(categorias))
+
+# ---------------------------------------------------------------
+# HERO
+# ---------------------------------------------------------------
+st.markdown(f"""
+<div class="hero">
+    <h1>Aplicaciones de Ciencia de Datos e IA</h1>
+    <p>Un recorrido por mis proyectos: desde la preparación de datos y los modelos
+    de machine learning hasta series de tiempo e IoT. Todas las apps están
+    desplegadas y listas para probar.</p>
+    <a href="{url_ia}" target="_blank">📚 Ver páginas y ejercicios prácticos</a>
+</div>
+""", unsafe_allow_html=True)
+
+# ---------------------------------------------------------------
+# GALERÍA
+# ---------------------------------------------------------------
+filtradas = [
+    a for a in apps
+    if a["cat"] in seleccion
+    and busqueda.lower() in (a["titulo"] + a["desc"] + " ".join(a["tags"])).lower()
+]
+
+if not filtradas:
+    st.info("No hay apps que coincidan con tu búsqueda 🤷")
+
+for i in range(0, len(filtradas), 3):
+    cols = st.columns(3, gap="large")
+    for col, app in zip(cols, filtradas[i:i + 3]):
+        with col:
+            st.markdown(tarjeta(app), unsafe_allow_html=True)
+
+st.markdown(
+    '<div class="footer">Hecho con ❤️ y Streamlit · Nicolas</div>',
+    unsafe_allow_html=True,
+)
