@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>¿Lloverá mañana? KNN</title>
+  <style>
+    :root { --fondo:#f2f5f4; --tarjeta:#fff; --texto:#1b2a2a; --suave:#5d6b6b; --acento:#227064; --borde:#d6dfdd;
+            --lluvia:#2f5fa7; --seco:#c98a12; }
+    * { box-sizing: border-box; }
+    body { margin:0; font-family: system-ui, -apple-system, "Segoe UI", sans-serif; background:var(--fondo); color:var(--texto); }
+    main { max-width: 640px; margin: 0 auto; padding: 32px 16px; }
+    h1 { margin: 0 0 4px; font-size: 1.6rem; }
+    .sub { color: var(--suave); margin: 0 0 24px; }
+    .tarjeta { background: var(--tarjeta); border: 1px solid var(--borde); border-radius: 12px; padding: 24px; }
+    .campo { margin-bottom: 22px; }
+    .fila { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px; }
+    label { font-weight: 600; }
+    .valor { font-variant-numeric: tabular-nums; color: var(--acento); font-weight: 700; }
+    input[type=range] { width: 100%; accent-color: var(--acento); }
+    button { width: 100%; padding: 12px; font-size: 1rem; font-weight: 600; color: #fff;
+             background: var(--acento); border: 0; border-radius: 8px; cursor: pointer; }
+    button:disabled { opacity: .6; }
+    #resultado { margin-top: 22px; display: none; }
+    #decision { font-size: 1.8rem; font-weight: 700; margin-bottom: 8px; }
+    #votos { font-size: 1.6rem; letter-spacing: 4px; margin: 4px 0 6px; }
+    #detalle { color: var(--suave); font-size: .9rem; margin-bottom: 16px; }
+    .tabla { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: .9rem; font-variant-numeric: tabular-nums; }
+    th, td { padding: 6px 8px; text-align: right; border-bottom: 1px solid var(--borde); }
+    th:first-child, td:first-child { text-align: left; }
+    th { color: var(--suave); font-weight: 600; }
+    footer { margin-top: 20px; font-size: .85rem; color: var(--suave); }
+    a { color: var(--acento); }
+  </style>
+</head>
+<body>
+<main>
+  <h1>🌦️ ¿Lloverá mañana? <small style="font-weight:400;color:var(--suave)">KNN</small></h1>
+  <p class="sub">Busca los días más parecidos en el historial y les pide que voten</p>
+
+  <form id="formulario" class="tarjeta">
+    <div class="campo">
+      <div class="fila"><label for="temperatura">Temperatura</label><span class="valor" id="v-temperatura"></span></div>
+      <input id="temperatura" type="range" min="5" max="40" step="0.5" value="24" data-unidad=" °C">
+    </div>
+    <div class="campo">
+      <div class="fila"><label for="humedad">Humedad</label><span class="valor" id="v-humedad"></span></div>
+      <input id="humedad" type="range" min="10" max="100" step="1" value="85" data-unidad=" %">
+    </div>
+    <div class="campo">
+      <div class="fila"><label for="viento">Viento</label><span class="valor" id="v-viento"></span></div>
+      <input id="viento" type="range" min="0" max="40" step="1" value="12" data-unidad=" km/h">
+    </div>
+
+    <button id="boton" type="submit">Preguntar a los vecinos</button>
+
+    <div id="resultado">
+      <div id="decision"></div>
+      <div id="votos"></div>
+      <div id="detalle"></div>
+      <div class="tabla">
+        <table>
+          <thead><tr><th>Vecino</th><th>Temp. (°C)</th><th>Humedad (%)</th><th>Viento (km/h)</th><th>¿Llovió?</th><th>Distancia</th></tr></thead>
+          <tbody id="filas"></tbody>
+        </table>
+      </div>
+    </div>
+  </form>
+
+  <footer>
+    <span id="info-modelo">Cargando información del modelo…</span> ·
+    <a href="/docs">Ver la API (/docs)</a>
+  </footer>
+</main>
+
+<script>
+  const campos = ["temperatura", "humedad", "viento"];
+
+  for (const c of campos) {
+    const control = document.getElementById(c);
+    const mostrar = () => document.getElementById("v-" + c).textContent = control.value + control.dataset.unidad;
+    control.addEventListener("input", mostrar);
+    mostrar();
+  }
+
+  fetch("/modelo").then(r => r.json()).then(m => {
+    const k = m.metricas_prueba;
+    document.getElementById("info-modelo").textContent =
+      `k = ${m.k} · ${m.dias_guardados} días guardados · Accuracy ${(k.accuracy * 100).toFixed(0)} % · Recall ${(k.recall * 100).toFixed(0)} %`;
+  });
+
+  document.getElementById("formulario").addEventListener("submit", async (evento) => {
+    evento.preventDefault();
+    const boton = document.getElementById("boton");
+    boton.disabled = true;
+
+    // 1. Reunir los datos
+    const datos = {};
+    for (const c of campos) datos[c] = Number(document.getElementById(c).value);
+
+    // 2. Enviarlos a la API
+    try {
+      const respuesta = await fetch("/predict", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(datos),
+      });
+      if (!respuesta.ok) throw new Error(`Error ${respuesta.status}`);
+      const r = await respuesta.json();
+
+      // 3. Mostrar el resultado
+      const lluvias = r.vecinos.filter(v => v.llovio === 1).length;
+      const decision = document.getElementById("decision");
+      decision.textContent = (r.clase === 1 ? "☔ " : "☀️ ") + r.decision;
+      decision.style.color = r.clase === 1 ? "var(--lluvia)" : "var(--seco)";
+      document.getElementById("votos").textContent = r.vecinos.map(v => v.llovio === 1 ? "☔" : "☀️").join("");
+      document.getElementById("detalle").textContent =
+        `${lluvias} de ${r.k} días parecidos tuvieron lluvia · probabilidad ${(r.probabilidad * 100).toFixed(0)} %`;
+      document.getElementById("filas").innerHTML = r.vecinos.map((v, i) =>
+        `<tr><td>${i + 1}</td><td>${v.temperatura.toFixed(1)}</td><td>${v.humedad.toFixed(1)}</td><td>${v.viento.toFixed(1)}</td>` +
+        `<td>${v.llovio === 1 ? "☔ Sí" : "☀️ No"}</td><td>${v.distancia}</td></tr>`).join("");
+    } catch (e) {
+      document.getElementById("decision").textContent = "No se pudo calcular";
+      document.getElementById("detalle").textContent = e.message;
+    }
+    document.getElementById("resultado").style.display = "block";
+    boton.disabled = false;
+  });
+</script>
+</body>
+</html>
